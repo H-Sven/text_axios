@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>来卡世界支付提示</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <style>
+
+        .algin-center{
+            font-size: .24rem;
+            text-align: center;
+            margin-top: .3rem;
+        }
+        .content img{
+            width: 50%;
+            margin: 0.5rem 0.8rem;
+            float: right;
+        }
+        .back{
+            position: absolute;
+            bottom: 1.5rem;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .back a{
+            padding: .2rem 0;
+            margin: 0.5rem;
+            border: 1px solid #9B9B9B;
+            background-color: #9B9B9B;
+            color: #ffffff;
+            font-size: .35rem;
+            border-radius: .1rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<section id="app" style="display: none;">
+    <div class="content">
+        <img>
+    </div>
+
+    <!--<div class="back">-->
+        <!--<div class="algin-center">(支付完成后返回页面即可)</div>-->
+        <!--<a href="javascript:window.history.go(-1)">返回上一页</a>-->
+    <!--</div>-->
+</section>
+<!--  -->
+<script src="main.js"></script>
+<script src="vue.min.js"></script>
+<script>
+     var notice_img="";
+     var d=new Date();
+     var STATICDOMAIN=d.getTime();
+     if (!inWeixin() && getQueryString('url')) {
+         window.location.href = getQueryString('url');
+     }else{
+        $('#app').css('display', 'block');
+        console.log(platform());     
+                if(platform() == 1){
+                	$("img").attr('src',"../images/alipay-notice-android.png");
+//                  this.notice_img = this.STATICDOMAIN + '../images/alipay-notice-android.png' + this.STATICVERION;
+                }else{
+                	$("img").attr('src',"../images/alipay-notice-ios.png");
+//                  this.notice_img = this.STATICDOMAIN + '/resource/images/alipay-notice-ios.png' + this.STATICVERION;
+                }
+    }
+            
+    function inWeixin(){
+        var ua = navigator.userAgent.toLowerCase();
+    	return ua.indexOf('micromessenger') != -1;
+    }
+    /**
+ * 获取平台  0ios  1 android
+ * @returns {*}
+ */
+function platform(){
+    var u = navigator.userAgent, app = navigator.appVersion;
+    if(/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))){
+        if(window.location.href.indexOf("?mobile")<0){
+            try{
+                if(/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)){
+                    return '0';
+                }else{
+                    return '1';
+                }
+            }catch(e){}
+        }
+    }else if( u.indexOf('iPad') > -1){
+        return '0';
+    }else{
+        return '1';
+    }
+}
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(decodeURIComponent(r[2]));
+    return null;
+}
+</script>
+</body>
+</html>
